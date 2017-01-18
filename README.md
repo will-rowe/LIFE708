@@ -7,9 +7,9 @@ Course materials for LIFE708
 
 This repo contains the course materials for the LIFE708 Masters module at the University of Liverpool.
 
-This includes a Docker container that is designed to help run the practical sessions. The container is a stripped down version of [BioDock](https://github.com/will-rowe/biodock).
+This includes a Docker container ([life708](https://hub.docker.com/r/wpmr/life708/)) that is designed to help run the practical sessions. The container is a stripped down version of [BioDock](https://github.com/will-rowe/biodock).
 
-Please refer [here](https://will-rowe.github.io) or Liverpool Vital for full instructions on accessing and setting up the course materials. The rest of this Readme will describe how to run the BioDock container.
+Please refer [here](https://will-rowe.github.io) or Liverpool Vital for full instructions on accessing and setting up the course materials. The rest of this readme will describe how to run the life708 Docker container.
 
 
 
