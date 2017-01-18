@@ -3,17 +3,15 @@ Course materials for LIFE708
 
 -----------
 
-## Intro
-
-Please refer [here](https://will-rowe.github.io) or Liverpool Vital for full instructions on accessing and setting up the course materials.
+## Outline
 
 This repo contains the course materials for the LIFE708 Masters module at the University of Liverpool.
 
-This includes a Docker container that is designed to run the practical sessions.
+This includes a Docker container that is designed to help run the practical sessions. The container is a stripped down version of [BioDock](https://github.com/will-rowe/biodock).
 
-This Docker container is a stripped down version of [BioDock](https://github.com/will-rowe/biodock).
+Please refer [here](https://will-rowe.github.io) or Liverpool Vital for full instructions on accessing and setting up the course materials. The rest of this Readme will describe how to run the BioDock container.
 
-The rest of this readme will describe how to run the BioDock container.
+
 
 
 ## Contact
@@ -35,23 +33,23 @@ The rest of this readme will describe how to run the BioDock container.
   `eval "$(docker-machine env MACHINE-NAME)"`
 
 
-  Pull the biodock image from Docker Hub:
+  Pull the container image from Docker Hub:
 
-  `docker pull wpmr/biodock:latest`
+  `docker pull wpmr/life708:latest`
 
 
   Alternatively, clone this git and build the biodock image from the Dockerfile:
 
-  `git clone https://gitlab.com/will_rowe/biodock.git`
+  `git clone https://github.com/will-rowe/LIFE708.git`
 
-  `cd biodock`
+  `cd LIFE708`
 
-  `docker build -t wpmr/biodock:latest .`
+  `docker build -t wpmr/life708:latest .`
 
 
   Launch the Docker container, making sure to mount a volume (allowing you to transfer data in and out of the container):
 
-  `docker run -itP --rm  -m 8g --name biodock -v ~/Desktop/SCRATCH/:/SCRATCH wpmr/biodock:latest`
+  `docker run -itP -m 8g --name biodock -v ~/Desktop/SCRATCH/:/SCRATCH wpmr/life708:latest`
 
   + -i = keep STDIN open even if not attached
 
@@ -59,13 +57,13 @@ The rest of this readme will describe how to run the BioDock container.
 
   + -P = publish all exposed ports to the host interfaces
 
-  + --rm = makes container emphemeral
-
   + -m = memory limit (8gb)
 
   + --name = name for container at runtime (easy to use for later exec commands)
 
   + -v = bind mount a volume (for data transfer etc. between container and host machine). Usage-> [host-src:]container-dest[:<options>]. The comma-delimited `options` are [rw|ro], [z|Z], [[r]shared|[r]slave|[r]private], and [nocopy].
+
+  + --rm = makes container ephemeral
 
 
 
@@ -75,7 +73,7 @@ The rest of this readme will describe how to run the BioDock container.
   This Docker container (and git repo) is intended to provide a standardised environment for running bioinformatics pipelines, scripts and software.
 
 
-  The container will launch bash by default, all software is in the path and scripts from the git repo are in /opt/SCRIPT_bin (also in path)
+  The container will launch bash by default, all software is in the path and scripts from the git repo are in /opt/scripts (also in path)
 
 
   A few helpful commands for managing the container:
