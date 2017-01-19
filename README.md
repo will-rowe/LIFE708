@@ -1,4 +1,4 @@
-# LIFE708 --- BioDock
+# LIFE708
 Course materials for LIFE708
 
 -----------
@@ -49,7 +49,7 @@ Please refer [here](https://will-rowe.github.io) or Liverpool Vital for full ins
 
   Launch the Docker container, making sure to mount a volume (allowing you to transfer data in and out of the container):
 
-  `docker run -itP -m 8g --name biodock -v ~/Desktop/SCRATCH/:/SCRATCH wpmr/life708:latest`
+  `docker run -itP -m 8g --name life708-will -v ~/Desktop/SCRATCH/:/SCRATCH wpmr/life708:latest`
 
   + -i = keep STDIN open even if not attached
 

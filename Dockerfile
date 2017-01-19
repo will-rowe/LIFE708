@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
   make \
   nano \
   unzip \
+  vim \
   wget \
   --force-yes
 
@@ -44,6 +45,8 @@ RUN apt-get install -y \
 RUN cd /opt && \
   wget --no-check-certificate ftp://ftp.sanger.ac.uk/pub/resources/software/artemis/artemis.tar.gz && \
   tar -xvf artemis.tar.gz && \
+  ln -s /opt/artemis/act /usr/local/bin/ \
+  ln -s /opt/artemis/art /usr/local/bin/ \
   rm -rf /opt/artemis.tar.gz
 
 
@@ -182,6 +185,6 @@ RUN cd /opt && \
 ################################################################################################
 # Define working directory and define default command for container launch
 ################################################################################################
-RUN mkdir /SCRATCH
-WORKDIR /SCRATCH
+RUN mkdir /MOUNTED-VOLUME-LIFE708
+WORKDIR /MOUNTED-VOLUME-LIFE708
 CMD ["bash"]
