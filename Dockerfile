@@ -1,7 +1,10 @@
 ################################################################################################
 # This is the Dockerfile for the LIFE708 teaching materials
 ################################################################################################
+# Base image
 FROM ubuntu:14.04
+
+# Maintainer
 MAINTAINER Will Rowe <will.rowe@liverpool.ac.uk>
 
 
@@ -20,7 +23,9 @@ RUN apt-get update && apt-get install -y \
   unzip \
   vim \
   wget \
-  --force-yes
+  --force-yes && \
+  apt-get autoclean && \
+  apt-get autoremove -y
 
 
 ################################################################################################
@@ -82,7 +87,9 @@ RUN cd /opt && \
   apt-get install -y libdatetime-perl libxml-simple-perl libdigest-md5-perl bioperl && \
   git clone git://github.com/tseemann/prokka.git && \
   prokka/bin/prokka --setupdb && \
-  ln -s /opt/prokka/bin/* /usr/local/bin/
+  ln -s /opt/prokka/bin/* /usr/local/bin/ &&\
+  apt-get autoclean && \
+  apt-get autoremove -y
 
 
 ################################################################################################
@@ -103,21 +110,23 @@ RUN cd /opt && \
 # Install SMALT and dependencies
 ################################################################################################
 RUN cd /opt && \
-    apt-get install -y zlib1g-dev libncurses5-dev libncursesw5-dev && \
-    wget http://downloads.sourceforge.net/project/mummer/mummer/3.23/MUMmer3.23.tar.gz && \
-    tar -zxf MUMmer3.23.tar.gz && \
-    cd MUMmer3.23 && \
-    make && \
-    mkdir bin && \
-    mv annotate combineMUMs delta-filter dnadiff exact-tandems gaps m* n* p* r* sh* ./bin && \
-    ln -s /opt/MUMmer3.23/bin/* /usr/local/bin/ && \
-    cd .. && \
-    for x in `find MUMmer3.23/ -maxdepth 1 -executable -type f`; do cp -s $x . ; done && \
-    rm -rf MUMmer3.23.tar.gz && \
-    wget http://downloads.sourceforge.net/project/smalt/smalt-0.7.6-bin.tar.gz && \
-    tar -zxf smalt-0.7.6-bin.tar.gz && \
-    cp smalt-0.7.6-bin/smalt_x86_64 /usr/local/bin/smalt && \
-    rm -rf smalt-0.7.6-bin.tar.gz
+   apt-get install -y zlib1g-dev libncurses5-dev libncursesw5-dev && \
+   wget http://downloads.sourceforge.net/project/mummer/mummer/3.23/MUMmer3.23.tar.gz && \
+   tar -zxf MUMmer3.23.tar.gz && \
+   cd MUMmer3.23 && \
+   make && \
+   mkdir bin && \
+   mv annotate combineMUMs delta-filter dnadiff exact-tandems gaps m* n* p* r* sh* ./bin && \
+   ln -s /opt/MUMmer3.23/bin/* /usr/local/bin/ && \
+   cd .. && \
+   for x in `find MUMmer3.23/ -maxdepth 1 -executable -type f`; do cp -s $x . ; done && \
+   rm -rf MUMmer3.23.tar.gz && \
+   wget http://downloads.sourceforge.net/project/smalt/smalt-0.7.6-bin.tar.gz && \
+   tar -zxf smalt-0.7.6-bin.tar.gz && \
+   cp smalt-0.7.6-bin/smalt_x86_64 /usr/local/bin/smalt && \
+   rm -rf smalt-0.7.6-bin.tar.gz && \
+   apt-get autoclean && \
+   apt-get autoremove -y
 
 
 ################################################################################################
@@ -166,11 +175,13 @@ RUN apt-get install -y \
   fastqc=0.10.1+dfsg-2 \
   fastx-toolkit=0.0.14-1 \
   HMMER=3.1b1-3 \
-  --force-yes
+  --force-yes && \
+  apt-get autoclean && \
+  apt-get autoremove -y
 
 
 ################################################################################################
-# Clone the github repo, add any python/shell scripts, create bash profile and clean cache
+# Clone the github repo, add any python/shell scripts, create bash profile, clean cache and expose port
 ################################################################################################
 RUN cd /opt && \
   git clone https://github.com/will-rowe/LIFE708.git && \
@@ -179,12 +190,19 @@ RUN cd /opt && \
   find /opt/LIFE708/scripts/ -type f -name '*.sh' -exec cp {} /opt/scripts/ \; && \
   ln -s /opt/scripts/* /usr/local/bin/ && \
   cp /opt/LIFE708/bashrc ~/.bashrc && \
-  rm -rf /var/lib/apt/lists/*
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+  apt-get autoclean && \
+  apt-get autoremove -y && \
+  rm -rf /var/lib/{apt,dpkg,cache,log}/
 
+#open ports private only
+EXPOSE 8080
 
 ################################################################################################
 # Define working directory and define default command for container launch
 ################################################################################################
-RUN mkdir /MOUNTED-VOLUME-LIFE708
+RUN mkdir /MOUNTED-VOLUME-LIFE708 && \
+  chmod a+rwx /MOUNTED-VOLUME-LIFE708
 WORKDIR /MOUNTED-VOLUME-LIFE708
 CMD ["bash"]
