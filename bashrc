@@ -154,3 +154,5 @@ echo "View the GitHub page for an overview of how to use this container"
 echo "Contact: will.rowe@liverpool.ac.uk"
 echo "###################################################################"
 echo " "
+
+source /opt/PAGIT-install/PAGIT/sourceme.pagit
