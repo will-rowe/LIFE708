@@ -45,6 +45,26 @@ RUN apt-get install -y \
 
 
 ################################################################################################
+# Install ABySS and dependencies
+################################################################################################
+RUN cd /opt && \
+  git clone https://github.com/sparsehash/sparsehash && \
+  cd sparsehash && \
+  ./configure && \
+  make && \
+  make install && \
+  cd /opt  && \
+  git clone https://github.com/bcgsc/abyss && \
+  cd /opt/abyss && \
+  wget http://downloads.sourceforge.net/project/boost/boost/1.56.0/boost_1_56_0.tar.bz2 && \
+  tar -xvf boost_1_56_0.tar.bz2 && \
+  ./autogen.sh && \
+  ./configure && \
+  make && \
+  make install
+
+
+################################################################################################
 # Install Artemis and ACT
 ################################################################################################
 RUN cd /opt && \
@@ -53,6 +73,18 @@ RUN cd /opt && \
   ln -s /opt/artemis/act /usr/local/bin/ && \
   ln -s /opt/artemis/art /usr/local/bin/ && \
   rm -rf /opt/artemis.tar.gz
+
+
+################################################################################################
+# Install Assembly Statistics
+################################################################################################
+RUN cd /opt && \
+  git clone https://github.com/sanger-pathogens/assembly-stats && \
+  mkdir assembly-stats/build && \
+  cd assembly-stats/build && \
+  cmake .. && \
+  make && \
+  make install
 
 
 ################################################################################################
@@ -87,9 +119,25 @@ RUN cd /opt && \
   apt-get install -y libdatetime-perl libxml-simple-perl libdigest-md5-perl bioperl && \
   git clone git://github.com/tseemann/prokka.git && \
   prokka/bin/prokka --setupdb && \
-  ln -s /opt/prokka/bin/* /usr/local/bin/ &&\
+  ln -s /opt/prokka/bin/* /usr/local/bin/ && \
   apt-get autoclean && \
-  apt-get autoremove -y
+  apt-get autoremove -y && \
+  ln -s /usr/bin/perl /usr/local/bin/perl && \
+  wget ftp://ftp.ncbi.nih.gov/toolbox/ncbi_tools/converters/by_program/tbl2asn/linux64.tbl2asn.gz && \
+  gunzip linux64.tbl2asn.gz && \
+  chmod a+rwx linux64.tbl2asn && \
+  ln -s /opt/linux64.tbl2asn /usr/local/bin/tbl2asn
+
+
+################################################################################################
+# Install Prokka and dependencies
+################################################################################################
+RUN cd /opt && \
+  mkdir PAGIT-install && \
+  cd PAGIT-install && \
+  wget ftp://ftp.sanger.ac.uk/pub/resources/software/pagit/PAGIT.V1.64bit.tgz && \
+  tar -xvf PAGIT.V1.64bit.tgz && \
+  bash ./installme.sh
 
 
 ################################################################################################
@@ -140,13 +188,12 @@ RUN cd /opt && \
 
 
 ################################################################################################
-# Install Velvet
+# Install SRAtoolkit
 ################################################################################################
 RUN cd /opt && \
-  git clone git://github.com/dzerbino/velvet && \
-  cd velvet && \
-  make color && \
-  ln -s /opt/velvet/velvet* /usr/local/bin/
+  wget http://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/current/sratoolkit.current-ubuntu64.tar.gz && \
+  tar -xvf sratoolkit.current-ubuntu64.tar.gz && rm sratoolkit.current-ubuntu64.tar.gz && \
+  ln -s /opt/sratoolkit.*/bin/* /usr/local/bin/
 
 
 ################################################################################################
