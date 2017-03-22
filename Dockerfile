@@ -54,8 +54,9 @@ RUN cd /opt && \
   make && \
   make install && \
   cd /opt  && \
-  git clone https://github.com/bcgsc/abyss && \
-  cd /opt/abyss && \
+  wget https://github.com/bcgsc/abyss/releases/download/2.0.0/abyss-2.0.0.tar.gz && \
+  tar -xvf abyss-2.0.0.tar.gz && \
+  cd /opt/abyss-2.0.0 && \
   wget http://downloads.sourceforge.net/project/boost/boost/1.56.0/boost_1_56_0.tar.bz2 && \
   tar -xvf boost_1_56_0.tar.bz2 && \
   ./autogen.sh && \
