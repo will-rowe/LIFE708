@@ -17,7 +17,9 @@ RUN apt-get update && apt-get install -y \
   dh-autoreconf \
   git \
   libhdf5-serial-dev \
+  zlib1g-dev \
   libncurses5-dev \
+  libncursesw5-dev \
   make \
   nano \
   unzip \
@@ -45,38 +47,6 @@ RUN apt-get install -y \
 
 
 ################################################################################################
-# Install ABySS and dependencies
-################################################################################################
-RUN cd /opt && \
-  git clone https://github.com/sparsehash/sparsehash && \
-  cd sparsehash && \
-  ./configure && \
-  make && \
-  make install && \
-  cd /opt  && \
-  wget https://github.com/bcgsc/abyss/releases/download/2.0.0/abyss-2.0.0.tar.gz && \
-  tar -xvf abyss-2.0.0.tar.gz && \
-  cd /opt/abyss-2.0.0 && \
-  wget http://downloads.sourceforge.net/project/boost/boost/1.56.0/boost_1_56_0.tar.bz2 && \
-  tar -xvf boost_1_56_0.tar.bz2 && \
-  ./autogen.sh && \
-  ./configure && \
-  make && \
-  make install
-
-
-################################################################################################
-# Install Artemis and ACT
-################################################################################################
-RUN cd /opt && \
-  wget --no-check-certificate ftp://ftp.sanger.ac.uk/pub/resources/software/artemis/artemis.tar.gz && \
-  tar -xvf artemis.tar.gz && \
-  ln -s /opt/artemis/act /usr/local/bin/ && \
-  ln -s /opt/artemis/art /usr/local/bin/ && \
-  rm -rf /opt/artemis.tar.gz
-
-
-################################################################################################
 # Install Assembly Statistics
 ################################################################################################
 RUN cd /opt && \
@@ -89,13 +59,6 @@ RUN cd /opt && \
 
 
 ################################################################################################
-# Install Cutadapt and PySam using pip
-################################################################################################
-RUN pip install --install-option="--prefix=/usr" cutadapt==1.10
-RUN pip install pysam==0.9.0
-
-
-################################################################################################
 # Install NCBI-blast
 ################################################################################################
 RUN cd /opt && \
@@ -103,14 +66,6 @@ RUN cd /opt && \
   tar -xvf ncbi-blast-2.6.0+-x64-linux.tar.gz && \
   ln -s /opt/ncbi-blast-2.6.0+/bin/* /usr/local/bin/ && \
   rm -rf ncbi-blast-2.6.0+-x64-linux.tar.gz
-
-
-################################################################################################
-# Install Prodigal
-################################################################################################
-RUN cd /opt && \
-  wget --no-check-certificate https://github.com/hyattpd/Prodigal/releases/download/v2.6.3/prodigal.linux -O prodigal && \
-  ln -s /opt/prodigal /usr/local/bin/prodigal
 
 
 ################################################################################################
@@ -131,7 +86,7 @@ RUN cd /opt && \
 
 
 ################################################################################################
-# Install Prokka and dependencies
+# Install PAGIT
 ################################################################################################
 RUN cd /opt && \
   mkdir PAGIT-install && \
@@ -159,7 +114,6 @@ RUN cd /opt && \
 # Install SMALT and dependencies
 ################################################################################################
 RUN cd /opt && \
-   apt-get install -y zlib1g-dev libncurses5-dev libncursesw5-dev && \
    wget http://downloads.sourceforge.net/project/mummer/mummer/3.23/MUMmer3.23.tar.gz && \
    tar -zxf MUMmer3.23.tar.gz && \
    cd MUMmer3.23 && \
@@ -198,21 +152,6 @@ RUN cd /opt && \
 
 
 ################################################################################################
-# Install VSearch
-################################################################################################
-RUN cd /opt && \
-  git clone git://github.com/torognes/vsearch && \
-  cd vsearch && \
-  ./autogen.sh && \
-  ./configure && \
-  automake && \
-  make && \
-  make install && \
-  cp ./bin/vsearch /usr/local/bin/ && \
-  rm -rf /opt/vsearch
-
-
-################################################################################################
 # Install additional software using apt-get
 ################################################################################################
 RUN apt-get install -y \
@@ -236,6 +175,8 @@ RUN cd /opt && \
   mkdir /opt/scripts && \
   find /opt/LIFE708/scripts/ -type f -name '*.py' -exec cp {} /opt/scripts/ \; && \
   find /opt/LIFE708/scripts/ -type f -name '*.sh' -exec cp {} /opt/scripts/ \; && \
+  wget https://raw.githubusercontent.com/dzerbino/velvet/master/contrib/shuffleSequences_fasta/shuffleSequences_fasta.pl -O /opt/scripts/shuffleSequences_fasta.pl && \
+  chmod a+rwx /opt/scripts/* && \
   ln -s /opt/scripts/* /usr/local/bin/ && \
   cp /opt/LIFE708/bashrc ~/.bashrc && \
   apt-get clean && \
@@ -250,7 +191,6 @@ EXPOSE 8080
 ################################################################################################
 # Define working directory and define default command for container launch
 ################################################################################################
-RUN mkdir /MOUNTED-VOLUME-LIFE708 && \
-  chmod a+rwx /MOUNTED-VOLUME-LIFE708
+RUN mkdir /MOUNTED-VOLUME-LIFE708 && chmod a+rwx /MOUNTED-VOLUME-LIFE708
 WORKDIR /MOUNTED-VOLUME-LIFE708
 CMD ["bash"]
