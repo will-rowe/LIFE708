@@ -20,6 +20,8 @@ RUN apt-get update && apt-get install -y \
   zlib1g-dev \
   libncurses5-dev \
   libncursesw5-dev \
+  libbz2-dev \
+  liblzma-dev \
   make \
   nano \
   unzip \
@@ -106,17 +108,27 @@ RUN cd /opt && \
 
 
 ################################################################################################
-# Install Samtools v1.3.1
+# Install Samtools, BCFtools and HTSlib (versions 1.4)
 ################################################################################################
 RUN cd /opt && \
-  wget --no-check-certificate https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2 && \
-  tar -xvf samtools-1.3.1.tar.bz2 && \
-  cd samtools-1.3.1 && \
-  ./configure && \
-  make && \
-  make PREFIX=/opt/samtools-1.3.1 install && \
-  ln -s /opt/samtools-1.3.1/bin/* /usr/local/bin/ && \
-  rm -rf /opt/samtools-1.3.1.tar.bz2
+  wget --no-check-certificate https://github.com/samtools/samtools/releases/download/1.4/samtools-1.4.tar.bz2 && \
+  wget --no-check-certificate https://github.com/samtools/bcftools/releases/download/1.4/bcftools-1.4.tar.bz2 && \
+  tar -xvf samtools-1.4.tar.bz2 && \
+  tar -xvf bcftools-1.4.tar.bz2 && \
+  cd samtools-1.4 && \
+  ./configure && make && make install && cd htslib-1.4 && make && make install && \
+  cd /opt/bcftools-1.4 && \
+  make && make install && cd .. && \
+  rm /opt/*.bz2
+
+
+################################################################################################
+# Install BWA
+################################################################################################
+RUN cd /opt && \
+  git clone https://github.com/lh3/bwa.git && \
+  cd bwa && make && \
+  ln -s /opt/bwa/bwa /usr/local/bin/bwa
 
 
 ################################################################################################
@@ -176,7 +188,6 @@ RUN cd /opt && \
 RUN apt-get install -y \
   bedtools=2.17.0-1 \
   bowtie2=2.1.0-2 \
-  bwa=0.7.5a-2 \
   cd-hit=4.6.1-2012-08-27-2 \
   fastqc=0.10.1+dfsg-2 \
   fastx-toolkit=0.0.14-1 \
