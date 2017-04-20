@@ -155,4 +155,6 @@ echo "Contact: will.rowe@liverpool.ac.uk"
 echo "###################################################################"
 echo " "
 
-source /opt/PAGIT-install/PAGIT/sourceme.pagit
+
+# PAGIT removed for variation workshop
+#source /opt/PAGIT-install/PAGIT/sourceme.pagit

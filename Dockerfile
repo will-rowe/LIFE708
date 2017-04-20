@@ -95,14 +95,14 @@ RUN cd /opt && \
 
 
 ################################################################################################
-# Install PAGIT (removed for variation workshop)
+# Install PAGIT
 ################################################################################################
-//RUN cd /opt && \
-//  mkdir PAGIT-install && \
-//  cd PAGIT-install && \
-//  wget ftp://ftp.sanger.ac.uk/pub/resources/software/pagit/PAGIT.V1.64bit.tgz && \
-//  tar -xvf PAGIT.V1.64bit.tgz && \
-//  bash ./installme.sh
+RUN cd /opt && \
+  mkdir PAGIT-install && \
+  cd PAGIT-install && \
+  wget ftp://ftp.sanger.ac.uk/pub/resources/software/pagit/PAGIT.V1.64bit.tgz && \
+  tar -xvf PAGIT.V1.64bit.tgz && \
+  bash ./installme.sh
 
 
 ################################################################################################
