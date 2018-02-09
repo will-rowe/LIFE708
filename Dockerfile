@@ -73,7 +73,7 @@ RUN cd /opt && \
 # Install NCBI-blast
 ################################################################################################
 RUN cd /opt && \
-  wget --no-check-certificate ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.6.0+-x64-linux.tar.gz && \
+  wget --no-check-certificate ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.6.0/ncbi-blast-2.6.0+-x64-linux.tar.gz && \
   tar -xvf ncbi-blast-2.6.0+-x64-linux.tar.gz && \
   ln -s /opt/ncbi-blast-2.6.0+/bin/* /usr/local/bin/ && \
   rm -rf ncbi-blast-2.6.0+-x64-linux.tar.gz
@@ -179,7 +179,11 @@ RUN cd /opt && \
 RUN cd /opt && \
   wget http://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/current/sratoolkit.current-ubuntu64.tar.gz && \
   tar -xvf sratoolkit.current-ubuntu64.tar.gz && rm sratoolkit.current-ubuntu64.tar.gz && \
-  ln -s /opt/sratoolkit.*/bin/* /usr/local/bin/
+  ln -s /opt/sratoolkit.*/bin/* /usr/local/bin/ && \
+  wget http://downloads.sourceforge.net/project/abacas/abacas.1.3.1.pl && \
+  awk 'BEGIN{print "#!/usr/bin/env perl"; getline} {print}' abacas.1.3.1.pl  > abacas.pl && \
+  chmod 755 abacas.pl && \
+  mv abacas.pl /usr/local/bin/
 
 
 ################################################################################################
@@ -192,6 +196,7 @@ RUN apt-get install -y \
   fastqc=0.10.1+dfsg-2 \
   fastx-toolkit=0.0.14-1 \
   HMMER=3.1b1-3 \
+  velvet \
   --force-yes && \
   apt-get autoclean && \
   apt-get autoremove -y
